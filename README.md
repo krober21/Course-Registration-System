@@ -1,2 +1,2 @@
 # Course-Registration-System
-Course registration system for students to register for courses based on grade level, including a waitlist feature if a course is full and if a seat opens up. 
+This project is a course registration system that allows students to register for a course. The order in which students register is based on their grade level, starting with the highest and moving down. There will be a system implemented that allows students to join a waitlist for a course when it is full. If a seat opens up, a student will be moved from the waitlist to the course based on who was in the waitlist first. Once a course is full, for ease of access, the students will be organized in a course list in alphabetical order. 
