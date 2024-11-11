@@ -55,6 +55,26 @@ public:
             current->next = newNode;       // Insert the new node
         }
     }
+    // returns true if node is removed and false if
+    bool remove(string student_ID){
+        if (head == nullptr){
+            return false;
+        }
+        Node* current = head;
+        while(current->next != nullptr && current->next->student->studentID != student_ID){
+            current = current->next;
+        }
+        if (current->next != nullptr) {
+            Node* temp = current->next;
+            current->next = current->next->next;
+            delete temp;
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
 
     // Method to display all students in the list
     void display() {
@@ -67,17 +87,55 @@ public:
     }
 };
 
+class Queue {
+private:
+    vector<Student *> queue;
+public:
+    void enqueue(Student* student){
+        queue.push_back(student);
+    }
+    void dequeue(){
+        if(!isEmpty()){
+            queue.erase(queue.begin());
+        }
+    }
+
+    Student* front(){
+        return queue[0];
+    }
+
+    bool isEmpty(){
+        return queue.empty();
+    }
+
+    void display(){
+        for(int i = 0; i < queue.size(); i++){
+            cout << queue[i]->firstName << " " << queue[i]->lastName << " (ID: "
+                 << queue[i]->studentID << ", Grade: " << queue[i]->gradeLevel << ")\n";
+        }
+
+    }
+
+    int size(){
+        return queue.size();
+    }
+
+};
+
+
+
 // Course class representing a course in the registration system
 class Course {
 private:
     LinkedList enrolledStudents; // List of students enrolled in the course
-    LinkedList waitlist;         // List of students on the waitlist
+    Queue waitlist;         // List of students on the waitlist
     int maxCapacity;             // Maximum number of students allowed in the course
+    int maxWaitlistCapacity;
     int enrolledCount = 0;       // Tracks the current number of enrolled students
 
 public:
     // Constructor to set the maximum capacity of the course
-    Course(int capacity) : maxCapacity(capacity) {}
+    Course(int capacity, int waitlistCapacity) : maxCapacity(capacity), maxWaitlistCapacity(waitlistCapacity) {}
 
     // Method to enroll a student in the course
     void enrollStudent(Student* student) {
@@ -85,9 +143,29 @@ public:
             enrolledStudents.insert(student); // Enroll student directly if there's space
             enrolledCount++;
             cout << "Enrollment successful for " << student->firstName << " " << student->lastName << ".\n";
-        } else {
-            waitlist.insert(student); // Add to waitlist if the course is full
+        }
+        else if (waitlist.size() < maxWaitlistCapacity)
+        {
+            waitlist.enqueue(student); // Add to waitlist if the course is full
             cout << "Course is full. " << student->firstName << " " << student->lastName << " added to waitlist.\n";
+        }
+        else {
+            cout << "Course & Waitlist is full \n";
+        }
+    }
+
+    //Method to drop a student from the course
+    void dropStudent(string student_ID){
+        if (enrolledStudents.remove(student_ID) == true){
+            cout << "Student with ID " << student_ID << " has been unenrolled." << endl;
+            enrolledCount--;
+            if (waitlist.size() > 0){
+                enrollStudent(waitlist.front());
+                waitlist.dequeue();
+            }
+        }
+        else {
+            cout << "Student with ID " << student_ID << "is not enrolled." <<endl;
         }
     }
 
@@ -101,51 +179,27 @@ public:
 };
 
 int main() {
-    // Create a course with a specified capacity
-    Course math101(2); // Max capacity of 2 for demonstration
 
-    // Vector to store created students
-    vector<Student*> students;
+    Course course(2, 4);
+    Student* s1 = new Student("Steve", "Nketiah", "12312", 4, "math");
+    Student* s2 = new Student("S", "Nketiah", "123", 4, "math");
+    Student* s3 = new Student("B", "Nketiah", "13", 4, "math");
+    Student* s4 = new Student("C", "Nketiah", "12312", 4, "math");
+    Student* s5 = new Student("D", "Nketiah", "123182", 4, "math");
+    Student* s6 = new Student("S", "Nketiah", "12256", 4, "math");
+    Student* s7 = new Student("A", "Nketiah", "122", 4, "math");
+    course.enrollStudent(s1);
+    course.enrollStudent(s2);
+    course.enrollStudent(s3);
+    course.enrollStudent(s4);
 
-    // Loop for user input
-    char choice;
-    do {
-        // Get student information
-        string firstName, lastName, studentID, courseChoice;
-        int gradeLevel;
+    course.dropStudent("123");
 
-        cout << "Enter your first name: ";
-        cin >> firstName;
-        cout << "Enter your last name: ";
-        cin >> lastName;
-        cout << "Enter your student ID: ";
-        cin >> studentID;
-        cout << "Enter your grade level (1: Freshman, 2: Sophomore, 3: Junior, 4: Senior): ";
-        cin >> gradeLevel;
-        cout << "Enter course choice: ";
-        cin.ignore(); // Clear newline character from input buffer
-        getline(cin, courseChoice);
+    course.enrollStudent(s5);
+    course.enrollStudent(s6);
+    course.enrollStudent(s7);
 
-        // Create a new student and store it in the list
-        Student* newStudent = new Student(firstName, lastName, studentID, gradeLevel, courseChoice);
-        students.push_back(newStudent);
-
-        // Enroll student in the selected course
-        math101.enrollStudent(newStudent);
-
-        // Display enrolled and waitlisted students
-        math101.showStudents();
-
-        // Ask if the user wants to add another student
-        cout << "\nWould you like to register another student? (y/n): ";
-        cin >> choice;
-
-    } while (choice == 'y' || choice == 'Y');
-
-    // Clean up allocated memory
-    for (Student* student : students) {
-        delete student;
-    }
+    course.showStudents();
 
     return 0;
 }
