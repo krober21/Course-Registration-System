@@ -5,6 +5,8 @@
 #include <ctime>
 #include <set>
 #include <limits>
+#include <iomanip>
+
 
 using namespace std;
 
@@ -366,13 +368,19 @@ int main() {
         }
 
         if (choice == 1) {
-            // Display course list with seat status
-            cout << "\nAvailable courses for enrollment:\n";
-            for (int i = 0; i < 20; ++i) {
-                cout << (i + 1) << ". " << courses[i].getCourseName(i) << endl;
-                courses[i].showSeatsStatus(); // Displays the number of filled seats for each course
+            cout << "\nAvailable Courses:\n";
+            cout << "------------------------------------------------------\n";
+            cout << left << setw(10) << "Index " << setw(24) << "Course Name" << "Seats Filled\n";
+            cout << "------------------------------------------------------\n";
+
+            for (int i = 0; i < courses.size(); ++i) {
+                cout << setw(11) << i + 1  // Display the course index
+                     << setw(20) << courses[i].getCourseName(i)  // Display the course name with proper spacing
+                     << courses[i].getEnrolledCount() << "/" << courses[i].getMaxCapacity() << " Seats Filled\n";
             }
+            cout << "------------------------------------------------------\n";
         }
+
         if (choice == 2) {
             // Register for a course
             cout << "\nEnter the name of the course you want to register in (ex: ENGL 1000): ";
@@ -471,6 +479,6 @@ int main() {
 
     } while (choice != 6);
 
-
     return 0;
 }
+
