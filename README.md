@@ -1,2 +1,23 @@
-# Course-Registration-System
-This project is a course registration system that allows students to register for a course. The order in which students register is based on their grade level, starting with the highest and moving down. There will be a system implemented that allows students to join a waitlist for a course when it is full. If a seat opens up, a student will be moved from the waitlist to the course based on who was in the waitlist first. Once a course is full, for ease of access, the students will be organized in a course list in alphabetical order. 
+# Course Registration System
+The aim of this project is to design and develop a class registration system that allows students to register
+for seats in a class where the order of priority for registration depends on the student’s grade level. It
+also facilitates the organization of students within the class based on alphabetical order. A wait-list will be
+included so that if a class is full, students will join a wait-list based on who joined it first. If a seat opens
+up, it will be filled by the wait-listed student first in line. The system will solve the problem of student
+registration and overfilling a course, which will improve the efficiency and student experience
+### The project’s main objectives are:
+- To allow students to efficiently register for courses.
+- Have an easy-to-use menu interface
+- Create a process for randomly filling seats for user simulation
+- Record student and course information
+- Use randomization to simulate the real world course registration systems.
+
+The expected outcomes include a functioning C++ based program, proper documentation, and a final project
+report.
+
+## How to run program
+The final code is located in main.cpp and so it can be imported into any c++ ide and be run from there.
+
+## Other files
+- Final report -- Project_Report.pdf
+- Presentation -- Final Presentation.pdf
